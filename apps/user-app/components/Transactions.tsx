@@ -4,8 +4,8 @@ import { Card } from "@repo/ui/card";
 import React, { useState } from "react";
 
 
-export const Transactions =  ({
-  transactions, id 
+export const Transactions = ({
+  transactions, id
 }: {
   transactions: {
     amount: number;
@@ -14,8 +14,18 @@ export const Transactions =  ({
     timestamp: Date;
   }[], id: Number
 }) => {
-  
-  
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(date));
+  };
+
+
+
 
   // Pagination State
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -51,29 +61,33 @@ export const Transactions =  ({
     <Card title="Recent Transactions">
       <div>
         {displayedTransactions.map((t, index) => (
-          <div className="flex w-full justify-between my-2" key={index}>
-            {t.toUserId=== id ? (
+          <div
+            className={`flex w-full justify-between my-2 p-3 rounded-lg ${t.toUserId === id ? "bg-green-50" : "bg-red-50"
+              }`}
+            key={index}
+          >
+            {t.toUserId === id ? (
               <div className="flex w-full justify-between my-2">
                 <div>
-                  <div className="text-sm">Received INR</div>
+                  <div className="text-sm font-medium">Received INR</div>
                   <div className="text-slate-600 text-xs">
-                    {t.timestamp.toDateString()}
+                    {formatDate(t.timestamp)}
                   </div>
                 </div>
-                <div className="flex flex-col justify-center">
-                  + Rs {t.amount / 100}
+                <div className="flex flex-col justify-center text-green-600 font-bold">
+                  + ₹{(t.amount / 100).toFixed(2)}
                 </div>
               </div>
             ) : (
               <div className="flex w-full justify-between my-2">
                 <div>
-                  <div className="text-sm">Sent INR</div>
+                  <div className="text-sm font-medium">Sent INR</div>
                   <div className="text-slate-600 text-xs">
-                    {t.timestamp.toDateString()}
+                    {formatDate(t.timestamp)}
                   </div>
                 </div>
-                <div className="flex flex-col justify-center">
-                  - Rs {t.amount / 100}
+                <div className="flex flex-col justify-center text-red-600 font-bold">
+                  - ₹{(t.amount / 100).toFixed(2)}
                 </div>
               </div>
             )}
@@ -81,14 +95,13 @@ export const Transactions =  ({
         ))}
       </div>
 
-      {/* Pagination Controls */}
+      
       <div className="flex justify-center items-center mt-4">
         <button
           onClick={handlePrevious}
           disabled={currentPage === 1}
-          className={`px-4 py-2 mx-1 rounded ${
-            currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
-          }`}
+          className={`px-4 py-2 mx-1 rounded ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
+            }`}
         >
           {"<"}
         </button>
@@ -98,9 +111,8 @@ export const Transactions =  ({
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}
-          className={`px-4 py-2 mx-1 rounded ${
-            currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
-          }`}
+          className={`px-4 py-2 mx-1 rounded ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
+            }`}
         >
           {">"}
         </button>

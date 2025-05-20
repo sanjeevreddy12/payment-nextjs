@@ -7,6 +7,7 @@ import { Transactions } from "../../../components/Transactions";
 
 const transaction = async () => {
   const session = await getServerSession(authOptions);
+  console.log("hiiiiiiiiiiiiiii")
   const transactions = await prisma.p2pTransfer.findMany({
     where: {
       OR: [
