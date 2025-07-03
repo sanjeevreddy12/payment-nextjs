@@ -38,7 +38,7 @@ export async function tranfer(to: string, amount: number) {
 
             })
             if (!frombalance || frombalance.amount < amount) {
-                alert("insufficiet balance")
+                
                 throw new Error("Insufficient Balance");
             }
 
